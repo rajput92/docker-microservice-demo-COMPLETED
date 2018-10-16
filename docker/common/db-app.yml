@@ -1,0 +1,73 @@
+version: "3"
+services:
+
+  db:
+    image:  mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+       MYSQL_DATABASE: msdemo
+       MYSQL_USER: root
+       MYSQL_ROOT_PASSWORD: secret
+    networks:
+       - mydb
+    deploy:
+      replicas: 1
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    #    hostname: rabbit
+    expose:
+    - 5672
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15672:15672"
+    #    links:
+    #      - zipkin
+    environment:
+      #       RABBITMQ_NODENAME: rabbitmq
+      RABBITMQ_USER: myuser
+      RABBITMQ_PASS: mypass
+
+  exchange:
+    image: notix/exhangeservice:n1
+    ports:
+     - "8000:8000"
+    depends_on:
+#     - eurekaserver
+#     - rabbitmq
+#     - zipkin
+      - db
+    links:
+      - db
+#       - eurekaserver
+#       - rabbitmq
+#       - zipkin
+
+    networks:
+       - mydb
+    deploy:
+       replicas: 1
+    environment:
+        SERVER_PORT: 8100
+        PROFILE: prod
+#        EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+#        EUREKASERVER_PORT: 8761
+#        RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+#        ZUULSERVER_PORT: 8765
+#        ZIPKIN_URI: "http://localhost:9411"
+#        RABBIT_PORT: 5672
+        MYSQL_PORT: 3306
+        ENCRYPT_KEY:       "IMSYMMETRIC"
+        DB_URL: "jdbc:mysql://database:3300/msdemo?useSSL=false&allowPublicKeyRetrieval=true"
+
+networks:
+       mydb:
+          driver: overlay
+        mynet:
+           driver: overlay
+
+
