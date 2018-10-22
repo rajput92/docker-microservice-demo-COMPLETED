@@ -1,0 +1,34 @@
+version: "3.4"
+services:
+
+  converter:
+    image: notix/currencyconverter:n1
+    ports:
+    - "8100:8100"
+#    depends_on:
+#    - eurekaserver
+#    #    - rabbitmq
+#    #    - zipkin
+#    - zuulserver
+#    links:
+#    - eurekaserver
+#    #    - rabbitmq
+#    #    - zipkin
+#    - zuulserver
+    networks:
+      - mynet
+
+
+    environment:
+      SERVER_PORT: 8100
+      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+      EUREKASERVER_PORT: 8761
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+      ZUULSERVER_PORT: 8765
+      ZIPKIN_URI: "http://localhost:9411"
+      RABBIT_PORT: 5672
+      ZIPKIN_PORT: 9411
+      ENCRYPT_KEY:       "IMSYMMETRIC"
+networks:
+  mynet:
+    driver: overlay

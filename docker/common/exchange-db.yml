@@ -1,0 +1,51 @@
+version: "3.4"
+services:
+  db:
+    image:  mysql:latest
+    ports:
+    - "3300:3306"
+    networks:
+    - mynet
+
+
+    environment:
+      MYSQL_DATABASE: msdemo
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+  #    deploy:
+  #      replicas: 1
+
+
+  exchange:
+    image: notix/exhangeservice:n1
+    ports:
+    - "8000:8000"
+#    depends_on:
+#    - eurekaserver
+#    #    - rabbitmq
+#    - zuulserver
+#    #    - zipkin
+#    - db
+#    links:
+#    - eurekaserver
+#    #    - rabbitmq
+#    #    - zipkin
+#    - zuulserver
+#    - db
+    networks:
+    - mynet
+    environment:
+      SERVER_PORT: 8000
+      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+      EUREKASERVER_PORT: 8761
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+      ZUULSERVER_PORT: 8765
+      ZIPKIN_URI: "http://localhost:9411"
+      ZIPKIN_PORT: 9411
+      RABBIT_PORT: 5672
+      MYSQL_PORT: 3306
+      PROFILE: prod
+      ENCRYPT_KEY:       "IMSYMMETRIC"
+networks:
+  mynet:
+    driver: overlay

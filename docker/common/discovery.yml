@@ -1,0 +1,40 @@
+version: "3.4"
+services:
+  eurekaserver:
+    image:   notix/eurekaserver:n1
+    ports:
+    - "8761:8761"
+    networks:
+    - mynet
+    #    deploy:
+    #      replicas: 1
+
+#  zuulserver:
+#    image: notix/zuulgateway:n1
+#    ports:
+#    - "8765:8765"
+#    expose:
+#    - 8765
+#    depends_on:
+#    - eurekaserver
+#    #    - rabbitmq
+#    #    - zipkin
+#    links:
+#    - eurekaserver
+#    #    - rabbitmq
+#    #    - zipkin
+#    networks:
+#    - mynet
+
+
+#    environment:
+#      SERVER_PORT: 8765
+#      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+#      EUREKASERVER_PORT: 8761
+#      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+#      RABBIT_PORT: 5672
+#      ZIPKIN_URI: "http://localhost:9411"
+#      ENCRYPT_KEY:       "IMSYMMETRIC"
+networks:
+    mynet:
+      driver: overlay

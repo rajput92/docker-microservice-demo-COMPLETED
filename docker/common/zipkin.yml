@@ -1,0 +1,21 @@
+version: "3.4"
+services:
+
+   zipkin:
+    image: openzipkin/zipkin
+    ports:
+    - 9411:9411
+#    depends_on:
+#    - rabbitmq
+#    links:
+#    - rabbitmq
+    networks:
+    - mynet
+
+    environment:
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+#    deploy:
+#      replicas: 1
+networks:
+  mynet:
+    driver: overlay
