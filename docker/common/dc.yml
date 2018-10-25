@@ -1,61 +1,6 @@
 version: "3.4"
 services:
 
-#  rabbitmq:
-#    image: rabbitmq:management
-#    container_name: rabbitmq
-#    #    hostname: rabbit
-#    expose:
-#    - 5672
-#    networks:
-#    - mynet
-##    deploy:
-##      replicas: 1
-#
-#    ports:
-#    - "4369:4369"
-#    - "5671:5671"
-#    - "5672:5672"
-#    - "25672:25672"
-#    - "15672:15672"
-#    #    links:
-#    #      - zipkin
-#    environment:
-#      #       RABBITMQ_NODENAME: rabbitmq
-#      RABBITMQ_USER : myuser
-#      RABBITMQ_PASS : mypass
-#  zipkin:
-#    image: openzipkin/zipkin
-#    ports:
-#    - 9411:9411
-#    depends_on:
-#    - rabbitmq
-#    links:
-#    - rabbitmq
-#    networks:
-#    - mynet
-#
-#    environment:
-#      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
-##    deploy:
-##      replicas: 1
-
-
-  db:
-    image:  mysql:latest
-    ports:
-    - "3300:3306"
-    networks:
-    - mynet
-
-
-    environment:
-      MYSQL_DATABASE: msdemo
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: secret
-#    deploy:
-#      replicas: 1
-
 
 
 
@@ -66,26 +11,21 @@ services:
     - "8761:8761"
     networks:
     - mynet
-#    deploy:
-#      replicas: 1
 
   zuulserver:
     image: notix/zuulgateway:n1
     ports:
     - "8765:8765"
-    expose:
-    - 8765
-    depends_on:
-    - eurekaserver
+#    depends_on:
+#    - eurekaserver
 #    - rabbitmq
 #    - zipkin
-    links:
-    - eurekaserver
+#    links:
+#    - eurekaserver
 #    - rabbitmq
 #    - zipkin
     networks:
     - mynet
-
 
     environment:
       SERVER_PORT: 8765
@@ -95,26 +35,21 @@ services:
       RABBIT_PORT: 5672
       ZIPKIN_URI: "http://localhost:9411"
       ENCRYPT_KEY:       "IMSYMMETRIC"
-#    deploy:
-#      replicas: 1
 
   converter:
     image: notix/currencyconverter:n1
     ports:
     - "8100:8100"
-    depends_on:
-    - eurekaserver
+#    depends_on:
+#    - eurekaserver
 #    - rabbitmq
 #    - zipkin
-    - zuulserver
-    links:
-    - eurekaserver
+#    links:
+#    - eurekaserver
 #    - rabbitmq
 #    - zipkin
-    - zuulserver
     networks:
     - mynet
-
 
     environment:
       SERVER_PORT: 8100
@@ -123,30 +58,28 @@ services:
       RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
       ZUULSERVER_PORT: 8765
       ZIPKIN_URI: "http://localhost:9411"
-      RABBIT_PORT: 5672
       ZIPKIN_PORT: 9411
+      RABBIT_PORT: 5672
       ENCRYPT_KEY:       "IMSYMMETRIC"
-#    deploy:
-#      replicas: 1
 
   exchange:
     image: notix/exhangeservice:n1
     ports:
     - "8000:8000"
-    depends_on:
-    - eurekaserver
-#    - rabbitmq
-    - zuulserver
-#    - zipkin
-    - db
-    links:
-    - eurekaserver
+#    depends_on:
+#    - eurekaserver
 #    - rabbitmq
 #    - zipkin
-    - zuulserver
-    - db
+#    - db
+#    links:
+#    - eurekaserver
+#    - rabbitmq
+#    - zipkin
+#    - db
     networks:
-    - mynet
+      - mynet
+
+
     environment:
       SERVER_PORT: 8000
       EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
@@ -159,11 +92,7 @@ services:
       MYSQL_PORT: 3306
       PROFILE: prod
       ENCRYPT_KEY:       "IMSYMMETRIC"
-#    deploy:
-#      replicas: 1
 networks:
-  #  mydb:
-  #    driver: overlay
   mynet:
     driver: overlay
 

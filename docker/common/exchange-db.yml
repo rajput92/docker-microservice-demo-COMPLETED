@@ -1,25 +1,9 @@
 version: "3.4"
 services:
-  db:
-    image:  mysql:latest
-    ports:
-    - "3300:3306"
-    networks:
-    - mynet
-
-
-    environment:
-      MYSQL_DATABASE: msdemo
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: secret
-  #    deploy:
-  #      replicas: 1
-
-
   exchange:
     image: notix/exhangeservice:n1
     ports:
-    - "8000:8000"
+       - "8000:8000"
 #    depends_on:
 #    - eurekaserver
 #    #    - rabbitmq
@@ -33,7 +17,7 @@ services:
 #    - zuulserver
 #    - db
     networks:
-    - mynet
+       - mynet
     environment:
       SERVER_PORT: 8000
       EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"

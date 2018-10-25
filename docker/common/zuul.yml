@@ -3,9 +3,8 @@ services:
  zuulserver:
   image: notix/zuulgateway:n1
   ports:
-  - "8765:8765"
-  expose:
-  - 8765
+    - "8765:8765"
+
 #  depends_on:
 #  - eurekaserver
 #  #    - rabbitmq

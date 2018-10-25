@@ -1,0 +1,53 @@
+version: "3.4"
+services:
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    #    hostname: rabbit
+    expose:
+    - 5672
+    networks:
+    - mynet
+    deploy:
+      replicas: 1
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15672:15672"
+    #    links:
+    #      - zipkin
+    environment:
+      #       RABBITMQ_NODENAME: rabbitmq
+      RABBITMQ_USER : myuser
+      RABBITMQ_PASS : mypass
+
+  db:
+    image:  mysql:latest
+    ports:
+    - "3300:3306"
+    networks:
+    - mynet
+
+    environment:
+      MYSQL_DATABASE: msdemo
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+    - 9411:9411
+#    depends_on:
+#    - rabbitmq
+#    links:
+#    - rabbitmq
+    networks:
+    - mynet
+    environment:
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+networks:
+  mynet:
+    driver: overlay
