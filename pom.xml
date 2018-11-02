@@ -27,6 +27,13 @@
 		<checkstyle.version>2.17</checkstyle.version>
 	</properties>
 
+	<scm>
+		<connection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</connection>
+		<developerConnection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</developerConnection>
+		<url>git@github.com:gudpick/docker-microservice-demo-COMPLETED</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -69,6 +76,16 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<configuration>
+						<tagNameFormat>v@{project.version}</tagNameFormat>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+					</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
