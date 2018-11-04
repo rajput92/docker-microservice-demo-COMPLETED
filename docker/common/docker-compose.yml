@@ -1,10 +1,10 @@
 version: "3.4"
 services:
 
- rabbitmq:
+  rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
-#    hostname: rabbit
+    #    hostname: rabbit
     expose:
     - 5672
     networks:
@@ -24,20 +24,20 @@ services:
       RABBITMQ_USER : myuser
       RABBITMQ_PASS : mypass
 
- db:
-      image:  mysql:latest
-      ports:
-        - "3300:3306"
-      networks:
-      - mydb
-      deploy:
-        replicas: 1
-      environment:
-        MYSQL_DATABASE: msdemo
-        MYSQL_USER: root
-        MYSQL_ROOT_PASSWORD: secret
+  db:
+    image:  mysql:latest
+    ports:
+    - "3300:3306"
+    networks:
+    - mydb
+    deploy:
+      replicas: 1
+    environment:
+      MYSQL_DATABASE: msdemo
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: secret
 
- zipkin:
+  zipkin:
     image: openzipkin/zipkin
     ports:
     - 9411:9411
@@ -54,26 +54,26 @@ services:
 
 
 
- eurekaserver:
+  eurekaserver:
     image:   notix/eurekaserver:n1
     ports:
-      - "8761:8761"
+    - "8761:8761"
     networks:
     - mynet
     deploy:
       replicas: 1
- zuulserver:
+  zuulserver:
     image: notix/zuulgateway:n1
     ports:
-      - "8765:8765"
+    - "8765:8765"
     depends_on:
-      - eurekaserver
-      - rabbitmq
-      - zipkin
+    - eurekaserver
+    - rabbitmq
+    - zipkin
     links:
-      - eurekaserver
-      - rabbitmq
-      - zipkin
+    - eurekaserver
+    - rabbitmq
+    - zipkin
     networks:
     - mynet
     deploy:
@@ -88,69 +88,69 @@ services:
       ZIPKIN_PORT: 9411
       ENCRYPT_KEY:       "IMSYMMETRIC"
 
- converter:
-        image: notix/currencyconverter:n1
-        ports:
-        - "8100:8100"
-        depends_on:
-        - eurekaserver
-        - rabbitmq
-        - zipkin
-        links:
-        - eurekaserver
-        - rabbitmq
-        - zipkin
-        networks:
-        - mynet
-        deploy:
-          replicas: 1
-        environment:
-          SERVER_PORT: 8100
-          EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
-          EUREKASERVER_PORT: 8761
-          RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
-          ZUULSERVER_PORT: 8765
-          ZIPKIN_URI: "http://localhost:9411"
-          RABBIT_PORT: 5672
-          ZIPKIN_PORT: 9411
-          ENCRYPT_KEY:       "IMSYMMETRIC"
+  converter:
+    image: notix/currencyconverter:n1
+    ports:
+    - "8100:8100"
+    depends_on:
+    - eurekaserver
+    - rabbitmq
+    - zipkin
+    links:
+    - eurekaserver
+    - rabbitmq
+    - zipkin
+    networks:
+    - mynet
+    deploy:
+      replicas: 1
+    environment:
+      SERVER_PORT: 8100
+      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+      EUREKASERVER_PORT: 8761
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+      ZUULSERVER_PORT: 8765
+      ZIPKIN_URI: "http://localhost:9411"
+      RABBIT_PORT: 5672
+      ZIPKIN_PORT: 9411
+      ENCRYPT_KEY:       "IMSYMMETRIC"
 
- exchange:
-        image: notix/exhangeservice:n1
-        ports:
-        - "8000:8000"
-        depends_on:
-        - eurekaserver
-        - rabbitmq
-        - zipkin
-        - db
-        links:
-        - eurekaserver
-        - rabbitmq
-        - zipkin
-        - db
-        networks:
-        - mydb
-        - mynet
-        deploy:
-          replicas: 1
-        environment:
-          SERVER_PORT: 8000
-          EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
-          EUREKASERVER_PORT: 8761
-          RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
-          ZUULSERVER_PORT: 8765
-          ZIPKIN_URI: "http://localhost:9411"
-          RABBIT_PORT: 5672
-          MYSQL_PORT: 3306
-          ZIPKIN_PORT: 9411
-          PROFILE: prod
-          ENCRYPT_KEY:       "IMSYMMETRIC"
+  exchange:
+    image: notix/exhangeservice:n1
+    ports:
+    - "8000:8000"
+    depends_on:
+    - eurekaserver
+    - rabbitmq
+    - zipkin
+    - db
+    links:
+    - eurekaserver
+    - rabbitmq
+    - zipkin
+    - db
+    networks:
+    - mydb
+    - mynet
+    deploy:
+      replicas: 1
+    environment:
+      SERVER_PORT: 8000
+      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+      EUREKASERVER_PORT: 8761
+      RABBIT_URI: "amqp://guest:guest@rabbitmq:5672"
+      ZUULSERVER_PORT: 8765
+      ZIPKIN_URI: "http://localhost:9411"
+      RABBIT_PORT: 5672
+      MYSQL_PORT: 3306
+      ZIPKIN_PORT: 9411
+      PROFILE: prod
+      ENCRYPT_KEY:       "IMSYMMETRIC"
 networks:
-    mydb:
-      driver: overlay
-    mynet:
-       driver: overlay
+  mydb:
+    driver: overlay
+  mynet:
+    driver: overlay
 
 
 

@@ -27,12 +27,12 @@
 		<checkstyle.version>2.17</checkstyle.version>
 	</properties>
 
-	<scm>
-		<connection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</connection>
-		<developerConnection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</developerConnection>
-		<url>git@github.com:gudpick/docker-microservice-demo-COMPLETED</url>
-		<tag>HEAD</tag>
-	</scm>
+	<!--<scm>-->
+		<!--<connection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</connection>-->
+		<!--<developerConnection>scm:git:git@github.com:gudpick/docker-microservice-demo-COMPLETED</developerConnection>-->
+		<!--<url>git@github.com:gudpick/docker-microservice-demo-COMPLETED</url>-->
+		<!--<tag>HEAD</tag>-->
+	<!--</scm>-->
 
 	<dependencies>
 		<dependency>
